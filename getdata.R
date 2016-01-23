@@ -7,6 +7,7 @@ mydata2 <- tapply(mydata1$steps, mydata1$date, sum)
 
 mydata2
 hist(mydata2, xlab= "Steps per day", main="Steps Histogram")
+mean(mydata2, trim=0, na.rm=TRUE)
 summary(mydata2)
 
 
