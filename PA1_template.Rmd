@@ -95,7 +95,14 @@ This supports display of activity time series for weekdays and weekends separate
 par(mfrow=c(2,1))
 
 mydworkd <- mydata[!mydata$weekend, ]
-summary(mydworkd)
+mydata3 <- tapply(mydworkd$stepsx, mydworkd$interval, mean)
+plot(mydata3, type="l", main=" Average Steps per 5min Interval- Weekdays", ylab="Steps", xlab="Interval", ylim= c(0,250))
 
+mydwend <- mydata[mydata$weekend,]
+mydata4 <- tapply(mydwend$stepsx, mydwend$interval, mean)
+plot(mydata4, type="l", main=" Average Steps per 5min Interval- Weekend", ylab="Steps", xlab="Interval", ylim= c(0,250))
+    
+    
 ```
 
+It can be seen that on the weekends, the morn peak is a little later than on weekdays. There are more steps per interval during the most of the rest of the day.

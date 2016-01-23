@@ -143,33 +143,14 @@ This supports display of activity time series for weekdays and weekends separate
 par(mfrow=c(2,1))
 
 mydworkd <- mydata[!mydata$weekend, ]
-summary(mydworkd)
+mydata3 <- tapply(mydworkd$stepsx, mydworkd$interval, mean)
+plot(mydata3, type="l", main=" Average Steps per 5min Interval- Weekdays", ylab="Steps", xlab="Interval", ylim= c(0,250))
+
+mydwend <- mydata[mydata$weekend,]
+mydata4 <- tapply(mydwend$stepsx, mydwend$interval, mean)
+plot(mydata4, type="l", main=" Average Steps per 5min Interval- Weekend", ylab="Steps", xlab="Interval", ylim= c(0,250))
 ```
 
-```
-##      steps                date          interval            hh       
-##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0   Min.   : 0.00  
-##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8   1st Qu.: 5.75  
-##  Median :  0.00   2012-10-03:  288   Median :1177.5   Median :11.50  
-##  Mean   : 35.34   2012-10-04:  288   Mean   :1177.5   Mean   :11.50  
-##  3rd Qu.:  8.00   2012-10-05:  288   3rd Qu.:1766.2   3rd Qu.:17.25  
-##  Max.   :806.00   2012-10-08:  288   Max.   :2355.0   Max.   :23.00  
-##  NA's   :1728     (Other)   :11232                                   
-##       mint            int              mst              stepsx      
-##  Min.   : 0.00   Min.   :  1.00   Min.   :  0.000   Min.   :  0.00  
-##  1st Qu.: 2.75   1st Qu.: 72.75   1st Qu.:  2.486   1st Qu.:  0.00  
-##  Median : 5.50   Median :144.50   Median : 34.113   Median :  0.00  
-##  Mean   : 5.50   Mean   :144.50   Mean   : 37.383   Mean   : 35.61  
-##  3rd Qu.: 8.25   3rd Qu.:216.25   3rd Qu.: 52.835   3rd Qu.: 24.00  
-##  Max.   :11.00   Max.   :288.00   Max.   :206.170   Max.   :806.00  
-##                                                                     
-##      day             weekend       
-##  Length:12960       Mode :logical  
-##  Class :character   FALSE:12960    
-##  Mode  :character   NA's :0        
-##                                    
-##                                    
-##                                    
-## 
-```
+![](PA1_template_files/figure-html/panel_weekend_weekday_activty_ts-1.png) 
 
+It can be seen that on the weekends, the morn peak is a little later than on weekdays. There are more steps per interval during the most of the rest of the day.
