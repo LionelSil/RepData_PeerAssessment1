@@ -102,13 +102,88 @@ plot(mydata3, type=&quot;l&quot;, main=&quot; Average Steps per 5min Interval&qu
 m2 &lt;- which.max(mydata3)
 hh &lt;- as.integer((m2-1)/12)
 mm &lt;- ((m2-1) - hh*12)*5</code></pre>
-<p>It can be seen that the maximum steps per interval is ‘r max(mydata3)’. This occurs in the interval commencing at 8 hour, 35 minutes.</p>
+<p>It can be seen that the maximum steps per interval is ’r max(mydata3)`. This occurs in the interval commencing at 8 hour, 35 minutes.</p>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<p>The missing values of steps for any interval will be replaced by the average value of steps for that interval on other days.</p>
+<p>The following code adds variables hh (hours), mint (minutes) and int (interval number) to the initial mydata data-frame. It then adds the mst variable (mean steps per interval). Then stepsx variable is added which is mst when there is a missing value for steps.</p>
+<pre class="r"><code># Now deal with missing values
+misr &lt;- complete.cases(mydata)
+
+# Add mean steps per interval as an additional column mst of the mydata dataframe
+mydata$hh &lt;-  as.integer(mydata$interval/100)
+mydata$mint &lt;-  as.integer((mydata$interval - mydata$hh*100)/5)
+mydata$int &lt;- (mydata$hh*12) + (mydata$mint + 1) 
+# Look-up in mydata3 vector
+mydata$mst &lt;- mydata3[mydata$int]
+mydata$stepsx &lt;- ifelse(misr, mydata$steps, mydata$mst)</code></pre>
+<p>The following histogram shows the distribution of steps per day after imputation</p>
+<pre class="r"><code>mydx &lt;- tapply(mydata$stepsx, mydata$date, sum)
+hist(mydx, xlab= &quot;Steps per day&quot;, main=&quot;Steps Histogram after Imputation&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+<p>Mean steps per day using imputation is: 1.076618910^{4}<br />Median steps using imputation per day is: 1.076618910^{4}</p>
+<p>So the impact of imputation on the mean is negligible</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
+<p>To analyze the differences between weekend and weekday activity patterns, we add a character day variable and a logical weekend variable to the mydata dataframe</p>
+<pre class="r"><code>mydata$day &lt;- weekdays(as.Date(mydata$date))
+mydata$weekend &lt;- ifelse((mydata$day==&quot;Sunday&quot;) | (mydata$day == &quot;Saturday&quot;), TRUE, FALSE)
+summary(mydata)</code></pre>
+<pre><code>##      steps                date          interval            hh       
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0   Min.   : 0.00  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8   1st Qu.: 5.75  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5   Median :11.50  
+##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5   Mean   :11.50  
+##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2   3rd Qu.:17.25  
+##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0   Max.   :23.00  
+##  NA's   :2304     (Other)   :15840                                   
+##       mint            int              mst              stepsx      
+##  Min.   : 0.00   Min.   :  1.00   Min.   :  0.000   Min.   :  0.00  
+##  1st Qu.: 2.75   1st Qu.: 72.75   1st Qu.:  2.486   1st Qu.:  0.00  
+##  Median : 5.50   Median :144.50   Median : 34.113   Median :  0.00  
+##  Mean   : 5.50   Mean   :144.50   Mean   : 37.383   Mean   : 37.38  
+##  3rd Qu.: 8.25   3rd Qu.:216.25   3rd Qu.: 52.835   3rd Qu.: 27.00  
+##  Max.   :11.00   Max.   :288.00   Max.   :206.170   Max.   :806.00  
+##                                                                     
+##      day             weekend       
+##  Length:17568       Mode :logical  
+##  Class :character   FALSE:12960    
+##  Mode  :character   TRUE :4608     
+##                     NA's :0        
+##                                    
+##                                    
+## </code></pre>
+<p>This supports display of activity time series for weekdays and weekends separately</p>
+<pre class="r"><code>par(mfrow=c(2,1))
+
+mydworkd &lt;- mydata[!mydata$weekend, ]
+summary(mydworkd)</code></pre>
+<pre><code>##      steps                date          interval            hh       
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0   Min.   : 0.00  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8   1st Qu.: 5.75  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5   Median :11.50  
+##  Mean   : 35.34   2012-10-04:  288   Mean   :1177.5   Mean   :11.50  
+##  3rd Qu.:  8.00   2012-10-05:  288   3rd Qu.:1766.2   3rd Qu.:17.25  
+##  Max.   :806.00   2012-10-08:  288   Max.   :2355.0   Max.   :23.00  
+##  NA's   :1728     (Other)   :11232                                   
+##       mint            int              mst              stepsx      
+##  Min.   : 0.00   Min.   :  1.00   Min.   :  0.000   Min.   :  0.00  
+##  1st Qu.: 2.75   1st Qu.: 72.75   1st Qu.:  2.486   1st Qu.:  0.00  
+##  Median : 5.50   Median :144.50   Median : 34.113   Median :  0.00  
+##  Mean   : 5.50   Mean   :144.50   Mean   : 37.383   Mean   : 35.61  
+##  3rd Qu.: 8.25   3rd Qu.:216.25   3rd Qu.: 52.835   3rd Qu.: 24.00  
+##  Max.   :11.00   Max.   :288.00   Max.   :206.170   Max.   :806.00  
+##                                                                     
+##      day             weekend       
+##  Length:12960       Mode :logical  
+##  Class :character   FALSE:12960    
+##  Mode  :character   NA's :0        
+##                                    
+##                                    
+##                                    
+## </code></pre>
 </div>
 
 

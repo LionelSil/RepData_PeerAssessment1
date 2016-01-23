@@ -19,8 +19,8 @@ plot(mydata3, type="l", main=" Average Steps per 5min Interval", ylab="Steps", x
 m1 <- max(mydata3)
 m1
 m2 <- which.max(mydata3)
-hh <- as.integer((m2/100)
-mm <- m2 - hh
+hh <- as.integer((m2-1)/12)
+mm <- ((m2-1) - hh*12)*5
 hh
 mm
 

@@ -45,13 +45,57 @@ hh <- as.integer((m2-1)/12)
 mm <- ((m2-1) - hh*12)*5
 ```
 
-It can be seen that the maximum steps per interval is 'r max(mydata3)'.
+It can be seen that the maximum steps per interval is 'r max(mydata3)`.
 This occurs in the interval commencing at `r hh` hour, `r mm` minutes. 
-
 
 
 ## Imputing missing values
 
+The missing values of steps for any interval will be replaced by the average value of steps for that interval on other days.
 
+The following code adds variables hh (hours), mint (minutes) and int (interval number) to the initial mydata data-frame. It then adds the mst variable (mean steps per interval). Then stepsx variable is added which is mst when there is a missing value for steps. 
+```{r}
+# Now deal with missing values
+misr <- complete.cases(mydata)
+
+# Add mean steps per interval as an additional column mst of the mydata dataframe
+mydata$hh <-  as.integer(mydata$interval/100)
+mydata$mint <-  as.integer((mydata$interval - mydata$hh*100)/5)
+mydata$int <- (mydata$hh*12) + (mydata$mint + 1) 
+# Look-up in mydata3 vector
+mydata$mst <- mydata3[mydata$int]
+mydata$stepsx <- ifelse(misr, mydata$steps, mydata$mst)
+```
+
+The following histogram shows the distribution of steps per day after imputation
+```{r Imputed_Steps_Perday_Hist}
+mydx <- tapply(mydata$stepsx, mydata$date, sum)
+hist(mydx, xlab= "Steps per day", main="Steps Histogram after Imputation")
+
+```
+
+Mean steps per day using imputation is: `r mean(mydx, trim=0, na.rm=TRUE)`  
+Median steps using imputation per day is: `r median(mydx, na.rm=TRUE)`  
+
+So the impact of imputation on the mean is negligible
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+To analyze the differences between weekend and weekday activity patterns, we add a character day variable and a logical weekend variable to the mydata dataframe 
+
+```{r}
+mydata$day <- weekdays(as.Date(mydata$date))
+mydata$weekend <- ifelse((mydata$day=="Sunday") | (mydata$day == "Saturday"), TRUE, FALSE)
+summary(mydata)
+```
+
+This supports display of activity time series for weekdays and weekends separately
+
+```{r panel_weekend_weekday_activty_ts}
+par(mfrow=c(2,1))
+
+mydworkd <- mydata[!mydata$weekend, ]
+summary(mydworkd)
+
+```
+
