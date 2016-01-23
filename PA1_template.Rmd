@@ -45,7 +45,7 @@ hh <- as.integer((m2-1)/12)
 mm <- ((m2-1) - hh*12)*5
 ```
 
-It can be seen that the maximum steps per interval is 'r max(mydata3)`.
+It can be seen that the maximum average steps per interval is `r max(mydata3)`.
 This occurs in the interval commencing at `r hh` hour, `r mm` minutes. 
 
 
@@ -86,7 +86,6 @@ To analyze the differences between weekend and weekday activity patterns, we add
 ```{r}
 mydata$day <- weekdays(as.Date(mydata$date))
 mydata$weekend <- ifelse((mydata$day=="Sunday") | (mydata$day == "Saturday"), TRUE, FALSE)
-summary(mydata)
 ```
 
 This supports display of activity time series for weekdays and weekends separately
@@ -105,4 +104,4 @@ plot(mydata4, type="l", main=" Average Steps per 5min Interval- Weekend", ylab="
     
 ```
 
-It can be seen that on the weekends, the morn peak is a little later than on weekdays. There are more steps per interval during the most of the rest of the day.
+It can be seen that on the weekends, the morning surge starts earlier on weekdays and rises to a higher peak. There are more steps per interval during most of the rest of the day.

@@ -61,7 +61,7 @@ hh <- as.integer((m2-1)/12)
 mm <- ((m2-1) - hh*12)*5
 ```
 
-It can be seen that the maximum steps per interval is 'r max(mydata3)`.
+It can be seen that the maximum average steps per interval is 206.1698113.
 This occurs in the interval commencing at 8 hour, 35 minutes. 
 
 
@@ -106,34 +106,6 @@ To analyze the differences between weekend and weekday activity patterns, we add
 ```r
 mydata$day <- weekdays(as.Date(mydata$date))
 mydata$weekend <- ifelse((mydata$day=="Sunday") | (mydata$day == "Saturday"), TRUE, FALSE)
-summary(mydata)
-```
-
-```
-##      steps                date          interval            hh       
-##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0   Min.   : 0.00  
-##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8   1st Qu.: 5.75  
-##  Median :  0.00   2012-10-03:  288   Median :1177.5   Median :11.50  
-##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5   Mean   :11.50  
-##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2   3rd Qu.:17.25  
-##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0   Max.   :23.00  
-##  NA's   :2304     (Other)   :15840                                   
-##       mint            int              mst              stepsx      
-##  Min.   : 0.00   Min.   :  1.00   Min.   :  0.000   Min.   :  0.00  
-##  1st Qu.: 2.75   1st Qu.: 72.75   1st Qu.:  2.486   1st Qu.:  0.00  
-##  Median : 5.50   Median :144.50   Median : 34.113   Median :  0.00  
-##  Mean   : 5.50   Mean   :144.50   Mean   : 37.383   Mean   : 37.38  
-##  3rd Qu.: 8.25   3rd Qu.:216.25   3rd Qu.: 52.835   3rd Qu.: 27.00  
-##  Max.   :11.00   Max.   :288.00   Max.   :206.170   Max.   :806.00  
-##                                                                     
-##      day             weekend       
-##  Length:17568       Mode :logical  
-##  Class :character   FALSE:12960    
-##  Mode  :character   TRUE :4608     
-##                     NA's :0        
-##                                    
-##                                    
-## 
 ```
 
 This supports display of activity time series for weekdays and weekends separately
@@ -153,4 +125,4 @@ plot(mydata4, type="l", main=" Average Steps per 5min Interval- Weekend", ylab="
 
 ![](PA1_template_files/figure-html/panel_weekend_weekday_activty_ts-1.png) 
 
-It can be seen that on the weekends, the morn peak is a little later than on weekdays. There are more steps per interval during the most of the rest of the day.
+It can be seen that on the weekends, the morning surge starts earlier on weekdays and rises to a higher peak. There are more steps per interval during most of the rest of the day.
